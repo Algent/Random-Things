@@ -18,6 +18,7 @@ public class ModBlocks {
     public static BlockOnlineDetector onlineDetector;
     public static BlockMoonSensor moonSensor;
     public static BlockBloodmoonSensor bloodMoonSensor;
+    public static BlockGazeSensor gazeSensor;
     public static BlockNotificationInterface notificationInterface;
     public static BlockSpectreBlock spectreBlock;
     public static BlockLapisLamp spectreLamp;
@@ -50,6 +51,7 @@ public class ModBlocks {
         if (ConfigBlocks.onlineDetector) onlineDetector = new BlockOnlineDetector();
         if (ConfigBlocks.moonSensor) moonSensor = new BlockMoonSensor();
         if (ConfigBlocks.bloodMoonSensor) bloodMoonSensor = new BlockBloodmoonSensor();
+        if (true) gazeSensor = new BlockGazeSensor();
         if (ConfigBlocks.notificationInterface) notificationInterface = new BlockNotificationInterface();
         if (ConfigBlocks.lapisLamp) spectreLamp = new BlockLapisLamp();
         if (ConfigBlocks.wirelessLever) wirelessLever = new BlockWirelessLever();

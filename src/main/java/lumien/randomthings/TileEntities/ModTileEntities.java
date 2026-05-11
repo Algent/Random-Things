@@ -12,6 +12,7 @@ public class ModTileEntities {
         GameRegistry.registerTileEntity(TileEntityFluidDisplay.class, "fluidDisplay");
         GameRegistry.registerTileEntity(TileEntityAdvancedFluidDisplay.class, "advancedFluidDisplay");
         GameRegistry.registerTileEntity(TileEntityOnlineDetector.class, "onlineDetector");
+        GameRegistry.registerTileEntity(TileEntityGazeSensor.class, "gazeSensor");
         GameRegistry.registerTileEntity(TileEntityNotificationInterface.class, "notificationInterface");
         GameRegistry.registerTileEntity(TileEntityWirelessLever.class, "wirelessLever");
         GameRegistry.registerTileEntity(TileEntityDyeingMachine.class, "dyeingMachine");
