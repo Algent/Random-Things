@@ -5,53 +5,41 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import lumien.randomthings.RandomThings;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import lumien.randomthings.TileEntities.TileEntityGazeSensor;
 
 public class BlockGazeSensor extends BlockContainerBase {
 
-    IIcon[] icons;
+    @SideOnly(Side.CLIENT)
+    private IIcon iconUnseen;
+    @SideOnly(Side.CLIENT)
+    private IIcon iconSeen;
 
     public BlockGazeSensor() {
-        super("gazeSensor", Material.ice);
+        super("gazeSensor", Material.rock);
 
-        this.setCreativeTab(RandomThings.creativeTab);
-
-        this.blockHardness = 2.0F;
-        icons = new IIcon[2];
+        this.blockHardness = 2F;
+        this.blockResistance = 10.0F;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister ir) {
-        icons[0] = ir.registerIcon("RandomThings:gazeSensor/gazeUnseen");
-        icons[1] = ir.registerIcon("RandomThings:gazeSensor/gazeSeen");
+        iconUnseen = ir.registerIcon("RandomThings:gazeSensor/gazeUnseen");
+        iconSeen = ir.registerIcon("RandomThings:gazeSensor/gazeSeen");
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-        return true;
-    }
-
-    @Override
-    public int getMixedBrightnessForBlock(IBlockAccess p_149677_1_, int p_149677_2_, int p_149677_3_, int p_149677_4_) {
-        return 15728704;
-    }
-
-    @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess ba, int posX, int posY, int posZ, int side) {
-        int metadata = ba.getBlockMetadata(posX, posY, posZ);
-        if (metadata == 1) {
-            return icons[1];
-        } else {
-            return icons[0];
-        }
+        return ba.getBlockMetadata(posX, posY, posZ) == 1 ? iconSeen : iconUnseen;
     }
 
     @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
-        return icons[0];
+    public IIcon getIcon(int side, int meta) {
+        return iconUnseen;
     }
 
     @Override
@@ -60,13 +48,13 @@ public class BlockGazeSensor extends BlockContainerBase {
     }
 
     @Override
-    public int isProvidingStrongPower(IBlockAccess blockAccess, int posX, int posY, int posZ, int side) {
+    public int isProvidingWeakPower(IBlockAccess blockAccess, int posX, int posY, int posZ, int side) {
         int metadata = blockAccess.getBlockMetadata(posX, posY, posZ);
         return metadata == 1 ? 15 : 0;
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess blockAccess, int posX, int posY, int posZ, int side) {
+    public int isProvidingStrongPower(IBlockAccess blockAccess, int posX, int posY, int posZ, int side) {
         int metadata = blockAccess.getBlockMetadata(posX, posY, posZ);
         return metadata == 1 ? 15 : 0;
     }

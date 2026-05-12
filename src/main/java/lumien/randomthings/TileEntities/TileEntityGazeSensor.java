@@ -9,39 +9,41 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+
+import lumien.randomthings.Configuration.Settings;
 
 public class TileEntityGazeSensor extends TileEntity {
 
-    static final double range = 16D;
+    private static double range = Settings.GAZE_SENSOR_RANGE;
+    private AxisAlignedBB detectionBox;
 
-    public TileEntityGazeSensor() {
-
+    @Override
+    public void validate() {
+        super.validate();
+        detectionBox = AxisAlignedBB.getBoundingBox(
+                xCoord - range,
+                yCoord - range,
+                zCoord - range,
+                xCoord + range,
+                yCoord + range,
+                zCoord + range);
     }
 
     @Override
     public void updateEntity() {
-        if (this.worldObj == null) return;
-        if (this.worldObj.isRemote) return;
+        if (worldObj == null || worldObj.isRemote) return;
+        if (detectionBox == null) return;
 
         if (this.worldObj.getTotalWorldTime() % 5L == 0L) {
             int currMeta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
             boolean gazed = false;
 
-            List players = worldObj.getEntitiesWithinAABB(
-                    EntityPlayer.class,
-                    AxisAlignedBB.getBoundingBox(
-                            xCoord - range,
-                            yCoord - range,
-                            zCoord - range,
-                            xCoord + range,
-                            yCoord + range,
-                            zCoord + range));
+            List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, detectionBox);
 
-            for (Object playerObj : players) {
-                if (playerObj == null) continue;
-                EntityPlayer player = (EntityPlayer) playerObj;
-                if (isGazedAt(player)) {
+            for (EntityPlayer player : players) {
+                if (isPlayerLookingAtBlock(player)) {
                     gazed = true;
                     break;
                 }
@@ -55,26 +57,22 @@ public class TileEntityGazeSensor extends TileEntity {
         }
     }
 
-    private boolean isGazedAt(EntityPlayer player) {
+    private boolean isPlayerLookingAtBlock(EntityPlayer player) {
+        Vec3 eye = Vec3.createVectorHelper(player.posX, player.posY + player.getEyeHeight(), player.posZ);
 
-        Vec3 lookVec = player.getLook(1.0F).normalize();
+        Vec3 look = player.getLookVec();
 
-        Vec3 toBlock = Vec3.createVectorHelper(
-                (this.xCoord + 0.5D) - player.posX,
-                (this.yCoord + 0.5D) - (player.posY + player.getEyeHeight()),
-                (this.zCoord + 0.5D) - player.posZ);
-        double distance = toBlock.lengthVector();
-        toBlock = toBlock.normalize();
-        double dot = lookVec.dotProduct(toBlock);
+        Vec3 end = Vec3.createVectorHelper(
+                eye.xCoord + look.xCoord * range,
+                eye.yCoord + look.yCoord * range,
+                eye.zCoord + look.zCoord * range);
 
-        return dot > 1.0D - 0.05D / distance;
-    }
+        MovingObjectPosition hit = worldObj.rayTraceBlocks(eye, end, false);
 
-    // this is broken
-    private boolean canBlockBeSeenByPlayer(EntityPlayer player) {
-        return this.worldObj.rayTraceBlocks(
-                Vec3.createVectorHelper(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ),
-                Vec3.createVectorHelper(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D)) == null;
+        return hit != null && hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK
+                && hit.blockX == xCoord
+                && hit.blockY == yCoord
+                && hit.blockZ == zCoord;
     }
 
     @Override
@@ -98,4 +96,5 @@ public class TileEntityGazeSensor extends TileEntity {
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         readFromNBT(packet.func_148857_g());
     }
+
 }

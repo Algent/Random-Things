@@ -21,6 +21,7 @@ public class RTConfiguration {
     public static Property spectreDimensionID;
     public static Property spectreDimensionFog;
     public static Property wirelessLeverRange;
+    public static Property gazeSensorRange;
     public static Property spectreImbueChance;
     public static Property fertilizedDirtGrowthModifier;
     public static Property imbueDuration;
@@ -74,6 +75,8 @@ public class RTConfiguration {
                 "The chance of a spirit spawning when you have a spirit binder in your inventory and kill the entity with a spectre sword. (0-1)");
         wirelessLeverRange = config
                 .get("Settings", "WirelessLeverRange", 10, "The range of a wireless lever in blocks");
+        gazeSensorRange = config
+                .get("Settings", "GazeSensorRange", 16, "Detection range of the Gaze Sensor in blocks (1-64)", 1, 64);
         fixedBackground = config.get(
                 "VanillaChanges",
                 "fixedBackground",
@@ -196,6 +199,7 @@ public class RTConfiguration {
         ConfigBlocks.onlineDetector = isBlockEnabled("OnlineDetector");
         ConfigBlocks.moonSensor = isBlockEnabled("MoonSensor");
         ConfigBlocks.bloodMoonSensor = isBlockEnabled("BloodmoonSensor");
+        ConfigBlocks.gazeSensor = isBlockEnabled("GazeSensor");
         ConfigBlocks.notificationInterface = isBlockEnabled("NotificationInterface");
         ConfigBlocks.lapisLamp = isBlockEnabled("LapisLamp");
         ConfigBlocks.dyeingMachine = isBlockEnabled("DyeingMachine");
@@ -254,6 +258,7 @@ public class RTConfiguration {
         Settings.SPIRIT_CHANCE = spiritChance.getDouble(0.02);
         Settings.SPIRIT_CHANCE_SWORD = spiritChanceSword.getDouble(0.1);
         Settings.WIRELESSLEVER_RANGE = wirelessLeverRange.getDouble(10);
+        Settings.GAZE_SENSOR_RANGE = RTConfiguration.gazeSensorRange.getInt(16);
         Settings.FIXED_BACKGROUND = fixedBackground.getString();
         Settings.SPECTRE_DIMENSON_ID = spectreDimensionID.getInt();
         Settings.SPECTRE_DIMENSION_FOG = spectreDimensionFog.getBoolean();

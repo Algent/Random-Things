@@ -51,7 +51,7 @@ public class ModBlocks {
         if (ConfigBlocks.onlineDetector) onlineDetector = new BlockOnlineDetector();
         if (ConfigBlocks.moonSensor) moonSensor = new BlockMoonSensor();
         if (ConfigBlocks.bloodMoonSensor) bloodMoonSensor = new BlockBloodmoonSensor();
-        if (true) gazeSensor = new BlockGazeSensor();
+        if (ConfigBlocks.gazeSensor) gazeSensor = new BlockGazeSensor();
         if (ConfigBlocks.notificationInterface) notificationInterface = new BlockNotificationInterface();
         if (ConfigBlocks.lapisLamp) spectreLamp = new BlockLapisLamp();
         if (ConfigBlocks.wirelessLever) wirelessLever = new BlockWirelessLever();

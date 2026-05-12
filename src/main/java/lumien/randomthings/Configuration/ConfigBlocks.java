@@ -16,4 +16,5 @@ public class ConfigBlocks {
     public static boolean energyDistributor;
     public static boolean enderEnergyDistributor;
     public static boolean bloodMoonSensor;
+    public static boolean gazeSensor;
 }

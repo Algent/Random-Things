@@ -11,6 +11,8 @@ public class Settings {
 
     public static double WIRELESSLEVER_RANGE = 10;
 
+    public static int GAZE_SENSOR_RANGE = 16;
+
     public static int SPECTRE_DIMENSON_ID;
     public static String FIXED_BACKGROUND = "";
     public static boolean SPECTRE_DIMENSION_FOG = true;
